@@ -1,0 +1,28 @@
+FROM maven:3.8.4-openjdk-17-slim AS build
+WORKDIR /app
+COPY pom.xml .
+COPY src ./src
+RUN mvn clean package -DskipTests
+
+FROM pedrombmachado/ntu_lubuntu:comp20081
+
+LABEL service="partition-aggregator"
+LABEL version="1.0"
+LABEL description="Service for AES Encryption, Chunking, and CRC32 Validation"
+
+WORKDIR /home/ntu-user/app
+
+USER root
+RUN apt-get update && apt-get install -y \
+    openjdk-17-jre-headless \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY --from=build --chown=ntu-user:ntu-user /app/target/CloudFileSystem-1.0-SNAPSHOT.jar partitioner.jar
+
+USER ntu-user
+
+ENV ENCRYPTION_ALGO=AES
+ENV CHUNK_SIZE=1024KB
+ENV JAVA_TOOL_OPTIONS="-Djava.awt.headless=true -Dglass.platform=Monocle -Dmonocle.platform=Headless -Dprism.order=sw"
+
+ENTRYPOINT ["java", "--add-opens", "java.base/java.net=ALL-UNNAMED", "-cp", "partitioner.jar:libs/*", "com.ntu.comp20081.cloudfilesystem.PartitionerService"]

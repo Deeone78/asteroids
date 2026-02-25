@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+
+<StackPane prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #f4f7f9;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ntu.comp20081.cloudfilesystem.PrimaryController">
+   <children>
+      <VBox alignment="CENTER" maxWidth="400.0" spacing="25.0" style="-fx-background-color: white; -fx-background-radius: 8; -fx-border-color: #dee2e6; -fx-border-radius: 8;">
+         <padding>
+            <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
+         </padding>
+         <children>
+            <VBox alignment="CENTER" spacing="5.0">
+               <children>
+                  <Label style="-fx-font-weight: bold; -fx-font-size: 24px; -fx-text-fill: #333333;" text="LB Cloud System" />
+                  <Label style="-fx-font-size: 13px;" text="Please enter your credentials to continue" textFill="#6c757d" />
+               </children>
+            </VBox>
+
+            <VBox spacing="15.0">
+               <children>
+                  <VBox spacing="5.0">
+                     <children>
+                        <Label style="-fx-font-weight: bold; -fx-font-size: 12px;" text="Username" />
+                        <TextField fx:id="userField" prefHeight="40.0" promptText="Enter your username" style="-fx-border-color: #ced4da; -fx-border-radius: 4; -fx-background-radius: 4;" />
+                     </children>
+                  </VBox>
+                  <VBox spacing="5.0">
+                     <children>
+                        <Label style="-fx-font-weight: bold; -fx-font-size: 12px;" text="Password" />
+                        <PasswordField fx:id="passField" prefHeight="40.0" promptText="Enter your password" style="-fx-border-color: #ced4da; -fx-border-radius: 4; -fx-background-radius: 4;" />
+                     </children>
+                  </VBox>
+                  <VBox spacing="5.0">
+                     <children>
+                        <Label style="-fx-font-weight: bold; -fx-font-size: 12px;" text="Account Type" />
+                        <ComboBox fx:id="roleBox" maxWidth="Infinity" prefHeight="40.0" style="-fx-background-color: white; -fx-border-color: #ced4da; -fx-border-radius: 4;" />
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>
+
+            <VBox spacing="10.0">
+               <children>
+                  <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#handleLogin" prefHeight="45.0" style="-fx-background-color: #007bff; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 4; -fx-cursor: hand;" text="Login" />
+                  
+                  <Button maxWidth="Infinity" mnemonicParsing="false" onAction="#handleRegister" prefHeight="35.0" style="-fx-background-color: transparent; -fx-text-fill: #007bff; -fx-cursor: hand; -fx-font-size: 12px;" text="Create an account" />
+               </children>
+            </VBox>
+            
+            <Separator prefWidth="200.0" />
+            
+            <HBox alignment="CENTER" spacing="8">
+                <children>
+                   <Circle fill="#28a745" radius="4.0" />
+                   <Label style="-fx-font-size: 11px;" text="System Online" textFill="#6c757d" />
+                </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</StackPane>

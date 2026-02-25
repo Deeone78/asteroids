@@ -1,0 +1,18 @@
+FROM pedrombmachado/ntu_lubuntu:comp20081
+
+USER root
+
+RUN apt-get update && apt-get install -y \
+    openssh-server \
+    && rm -rf /var/lib/apt/lists/* \
+    && mkdir -p /var/run/sshd
+RUN echo "ntu-user:ntu-user" | chpasswd
+
+RUN mkdir -p /home/ntu-user/storage && \
+    chown ntu-user:ntu-user /home/ntu-user/storage
+
+RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
+
+EXPOSE 22
+
+ENTRYPOINT ["/usr/sbin/sshd", "-D"]

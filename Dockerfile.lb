@@ -1,0 +1,31 @@
+FROM maven:3.8.4-openjdk-17-slim AS build
+WORKDIR /app
+COPY pom.xml .
+RUN mvn dependency:go-offline
+COPY src ./src
+RUN mvn clean package -DskipTests
+
+FROM pedrombmachado/ntu_lubuntu:comp20081
+
+WORKDIR /app
+
+USER root
+
+RUN apt-get update && apt-get install -y \
+    openjdk-17-jre-headless \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN chown -R ntu-user:ntu-user /app
+
+COPY --from=build --chown=ntu-user:ntu-user /app/target/CloudFileSystem-1.0-SNAPSHOT.jar app.jar
+
+USER ntu-user
+
+ENV DB_URL=jdbc:mysql://db-node:3306/lbcsystem
+ENV DISPLAY=:0
+
+ENTRYPOINT ["java", \
+    "--add-opens", "java.base/java.net=ALL-UNNAMED", \
+    "-Dprism.order=sw", \
+    "-cp", "app.jar", \
+    "com.ntu.comp20081.cloudfilesystem.LoadBalancerService"]

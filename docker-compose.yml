@@ -1,0 +1,127 @@
+services:
+  ntu-vm-comp20081:
+    container_name: ntu-vm-comp20081
+    image: pedrombmachado/ntu_lubuntu:comp20081
+    ports:
+      - "3390:3389" 
+      - "2022:22"   
+    hostname: ntu-vm-comp20081
+    volumes:
+      - D:/System_Software_assessment_load_balancer:/home/ntu-user/NetBeansProjects
+    networks:
+      - cloud-backplane   
+      - comp20081_network  
+    depends_on:
+      db-node:
+        condition: service_healthy
+
+  # --- Centralized Remote Registry (Requirement 13) ---
+  db-node:
+    image: mysql:8.0
+    container_name: lbc_mysql_registry
+    restart: always
+    environment:
+      MYSQL_DATABASE: lbcsystem
+      MYSQL_ROOT_PASSWORD: rootpassword
+    ports:
+      - "3306:3306" 
+    volumes:
+      - ./sql-init:/docker-entrypoint-initdb.d
+      - mysql_data:/var/lib/mysql 
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - cloud-backplane
+
+  # --- MQTT Broker ---
+  mqtt-broker:
+    image: eclipse-mosquitto:latest
+    container_name: lbc_mqtt_broker
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
+    networks:
+      - cloud-backplane
+
+  # --- File Partitioning ---
+  file-partitioner:
+    build: 
+      context: .
+      dockerfile: Dockerfile.partitioner
+    container_name: lbc_partitioner
+    environment:
+      - HEADLESS_MODE=true
+    networks:
+      - cloud-backplane
+
+  # --- Load Balancer ---
+  load-balancer:
+    build: 
+      context: .
+      dockerfile: Dockerfile.lb
+    container_name: lbc_load_balancer
+    environment:
+      - HEADLESS_MODE=true
+    depends_on:
+      mqtt-broker:
+        condition: service_started
+    networks:
+      - cloud-backplane
+
+ # --- Storage Node 1 (Access via OpenSSH) ---
+  server1:
+    build:
+      context: .
+      dockerfile: Dockerfile.storage
+    container_name: storage_node_01
+    ports:
+      - "2221:22"
+    volumes:
+      - ./cloud_storage/server1:/home/ntu-user/storage
+    networks:
+      - cloud-backplane
+
+  # --- Storage Node 2 (Access via OpenSSH) ---
+  server2:
+    build:
+      context: .
+      dockerfile: Dockerfile.storage
+    container_name: storage_node_02
+    ports:
+      - "2222:22" 
+    volumes:
+      - ./cloud_storage/server2:/home/ntu-user/storage
+    networks:
+      - cloud-backplane
+
+  # --- Background Gateway (Requirement 111) ---
+  cloud-app:
+    build: .
+    container_name: lbc_main_gateway
+    depends_on:
+      db-node:
+        condition: service_healthy
+      mqtt-broker:
+        condition: service_started
+    environment:
+      - HEADLESS_MODE=true
+      - DB_URL=jdbc:mysql://db-node:3306/lbcsystem
+      - MQTT_BROKER=tcp://mqtt-broker:1883
+    networks:
+      - cloud-backplane
+
+# --- NETWORKS ---
+networks:
+  cloud-backplane:
+    driver: bridge
+  comp20081_network:
+    driver: bridge
+
+# --- VOLUMES ---
+volumes:
+  mysql_data:
+  docker_comp20081:

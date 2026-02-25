@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<HBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ntu.comp20081.cloudfilesystem.DashboardController">
+    <VBox spacing="15" style="-fx-background-color: #2c3e50;" prefWidth="250">
+        <padding><Insets top="30" right="20" bottom="30" left="20"/></padding>
+        <Label text="Cloud System" style="-fx-text-fill: white; -fx-font-size: 22px; -fx-font-weight: bold;"/>
+        <Separator opacity="0.2" />
+        <Button text="My Files" onAction="#loadFiles" maxWidth="Infinity" style="-fx-background-color: #34495e; -fx-text-fill: white;"/>
+        <Button text="Shared with Me" maxWidth="Infinity" style="-fx-background-color: transparent; -fx-text-fill: white;"/>
+        <Region VBox.vgrow="ALWAYS" />
+        <Button text="Logout" onAction="#handleLogout" maxWidth="Infinity" style="-fx-background-color: #e74c3c; -fx-text-fill: white;"/>
+    </VBox>
+
+    <VBox spacing="20" HBox.hgrow="ALWAYS" style="-fx-background-color: #f4f7f6;">
+        <padding><Insets top="30" right="30" bottom="30" left="30"/></padding>
+        
+        <Label fx:id="welcomeLabel" text="Welcome, zain (USER)" style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+        
+        <TableView fx:id="fileTable" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="nameColumn" text="File Name" prefWidth="350"/>
+                <TableColumn fx:id="sizeColumn" text="Size (KB)" prefWidth="120"/>
+                <TableColumn fx:id="dateColumn" text="Upload Date" prefWidth="180"/>
+            </columns>
+        </TableView>
+        
+        <HBox spacing="15" alignment="CENTER_RIGHT">
+            <Button text="Refresh List" onAction="#loadFiles" style="-fx-padding: 10 20;"/>
+            <Button text="Upload New File" onAction="#handleUpload" 
+                    style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20;"/>
+        </HBox>
+    </VBox>
+</HBox>

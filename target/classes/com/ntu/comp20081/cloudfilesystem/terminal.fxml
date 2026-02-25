@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="500.0" prefWidth="750.0" spacing="0" 
+      style="-fx-background-color: #0d0d0d; -fx-border-color: #333333; -fx-border-width: 1; -fx-background-radius: 8; -fx-border-radius: 8;" 
+      xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="com.ntu.comp20081.cloudfilesystem.TerminalController">
+    
+    <HBox spacing="8" alignment="CENTER_LEFT" style="-fx-background-color: #1a1a1a; -fx-padding: 10 15; -fx-background-radius: 8 8 0 0;">
+        <children>
+            <Label text="●" textFill="#ff5f56" style="-fx-font-size: 14px;" />
+            <Label text="●" textFill="#ffbd2e" style="-fx-font-size: 14px;" />
+            <Label text="●" textFill="#27c93f" style="-fx-font-size: 14px;" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Label text="CLOUD-OS v2.1 TERMINAL" textFill="#888888" style="-fx-font-family: 'Consolas'; -fx-font-size: 11px; -fx-font-weight: bold;" />
+            <Region HBox.hgrow="ALWAYS" />
+        </children>
+    </HBox>
+
+    <TextArea fx:id="terminalOutput" editable="false" VBox.vgrow="ALWAYS" wrapText="true"
+              style="-fx-control-inner-background: #0d0d0d; -fx-text-fill: #00FF00; -fx-font-family: 'Consolas'; -fx-font-size: 13px; -fx-background-insets: 0; -fx-padding: 10; -fx-border-width: 0;" />
+
+    <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-background-color: #1a1a1a; -fx-padding: 10 15;">
+        <children>
+            <Label text="admin@cloud-os:~$" textFill="#27c93f" style="-fx-font-family: 'Consolas'; -fx-font-weight: bold;" />
+            <TextField fx:id="terminalInput" onAction="#handleCommand" HBox.hgrow="ALWAYS" 
+                       promptText="Enter command (help for list)..."
+                       style="-fx-background-color: transparent; -fx-text-fill: #ffffff; -fx-font-family: 'Consolas'; -fx-border-width: 0 0 1 0; -fx-border-color: #444444; -fx-padding: 0;" />
+        </children>
+    </HBox>
+
+    <HBox style="-fx-background-color: #27c93f; -fx-padding: 3 15; -fx-background-radius: 0 0 8 8;">
+        <children>
+            <Label text="CONNECTED: Remote MySQL Database" textFill="#0d0d0d" 
+                   style="-fx-font-family: 'Consolas'; -fx-font-size: 10px; -fx-font-weight: bold;" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Label text="UTF-8" textFill="#0d0d0d" style="-fx-font-family: 'Consolas'; -fx-font-size: 10px;" />
+        </children>
+    </HBox>
+</VBox>
